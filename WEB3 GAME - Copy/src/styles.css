@@ -1,0 +1,1182 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap');
+
+/* ================= RESET & BASE ================= */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Rajdhani', sans-serif;
+  color: #fff;
+  cursor: default;
+  user-select: none;
+}
+
+#game-canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ================= START SCREEN ================= */
+#start-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(20,0,40,0.92) 0%, rgba(0,0,0,0.98) 100%);
+  backdrop-filter: blur(8px);
+}
+
+.start-content {
+  text-align: center;
+  animation: fadeInUp 1s ease-out;
+}
+
+.start-content h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 4rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #ff6b35, #f7c948, #ff6b35);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s ease-in-out infinite;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 40px rgba(255,107,53,0.3);
+}
+
+.start-content .subtitle {
+  font-size: 1.2rem;
+  color: #aaa;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+}
+
+#start-btn {
+  display: block;
+  margin: 0 auto 1rem;
+  padding: 14px 60px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ff6b35, #e8451a);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+#start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255,107,53,0.5);
+}
+
+#connect-wallet-btn {
+  display: block;
+  margin: 0 auto 2rem;
+  padding: 10px 40px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.08);
+  color: #ccc;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+#connect-wallet-btn:hover {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border-color: rgba(255,255,255,0.3);
+}
+
+.instructions {
+  font-size: 0.85rem;
+  color: #666;
+  letter-spacing: 1px;
+}
+
+/* ================= HUD ================= */
+#hud {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#hud > * {
+  pointer-events: auto;
+}
+
+/* Player Health */
+#player-hud {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.player-health-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #e63946;
+  letter-spacing: 2px;
+}
+
+.health-bar-container {
+  width: 200px;
+  height: 12px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+#player-health-bar {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #e63946, #ff6b6b);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+}
+
+#player-health-text {
+  font-size: 0.8rem;
+  color: #aaa;
+  font-weight: 600;
+}
+
+/* Sword Indicator */
+#sword-indicator {
+  position: absolute;
+  bottom: 60px;
+  left: 30px;
+  padding: 6px 16px;
+  background: rgba(247,201,72,0.15);
+  border: 1px solid rgba(247,201,72,0.3);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #f7c948;
+  font-weight: 600;
+}
+
+/* Crosshair */
+#crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.5rem;
+  color: rgba(255,255,255,0.4);
+  pointer-events: none;
+  text-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+
+/* Boss HUD */
+#boss-hud {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 400px;
+  max-width: 90vw;
+}
+
+#boss-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ff6b35;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(255,107,53,0.5);
+}
+
+.boss-health-container {
+  width: 100%;
+  height: 16px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255,107,53,0.3);
+}
+
+#boss-health-bar {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b35, #f7c948);
+  border-radius: 8px;
+  transition: width 0.4s ease;
+}
+
+/* Notifications */
+#notification-container {
+  position: absolute;
+  top: 100px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.notification {
+  padding: 10px 20px;
+  background: rgba(0,0,0,0.75);
+  border-left: 3px solid #f7c948;
+  border-radius: 0 6px 6px 0;
+  backdrop-filter: blur(8px);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #f7c948;
+  animation: notifSlideIn 0.4s ease-out, notifFadeOut 0.5s ease-in 2.5s forwards;
+  max-width: 300px;
+}
+
+.notification.info {
+  border-left-color: #4ecdc4;
+  color: #4ecdc4;
+}
+
+.notification.danger {
+  border-left-color: #e63946;
+  color: #e63946;
+}
+
+.notification.success {
+  border-left-color: #2ecc71;
+  color: #2ecc71;
+}
+
+/* Gear Slots */
+#inventory-hint {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  gap: 8px;
+  pointer-events: none;
+}
+
+#gear-slots .gear-slot {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+#gear-slots .gear-slot.active {
+  border-color: #f7c948;
+  background: rgba(247,201,72,0.1);
+}
+
+/* Minimap */
+#minimap {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.5);
+  pointer-events: none;
+}
+
+/* ================= LOOT PANEL ================= */
+#loot-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(12px);
+}
+
+.loot-content {
+  text-align: center;
+  padding: 40px 60px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.loot-content h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #f7c948;
+}
+
+#loot-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+#loot-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+#loot-rarity {
+  font-size: 0.9rem;
+  color: #a855f7;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+#loot-description {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 2rem;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#mint-nft-btn {
+  display: block;
+  width: 100%;
+  padding: 12px 30px;
+  margin-bottom: 0.75rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #a855f7, #6366f1);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#mint-nft-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(168,85,247,0.5);
+}
+
+#continue-btn {
+  display: block;
+  width: 100%;
+  padding: 10px 30px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.08);
+  color: #ccc;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#continue-btn:hover {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+/* ================= DEATH SCREEN ================= */
+#death-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(60,0,0,0.9);
+  backdrop-filter: blur(8px);
+}
+
+.death-content {
+  text-align: center;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.death-content h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  color: #e63946;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 40px rgba(230,57,70,0.5);
+}
+
+.death-content p {
+  color: #aaa;
+  margin-bottom: 2rem;
+}
+
+#respawn-btn {
+  padding: 12px 50px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #e63946, #c1121f);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+#respawn-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(230,57,70,0.5);
+}
+
+/* ================= ANIMATIONS ================= */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes notifSlideIn {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes notifFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Damage number floating in 2D overlay */
+.damage-number {
+  position: fixed;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 1.2rem;
+  color: #ff6b35;
+  text-shadow: 0 0 6px rgba(255,107,53,0.6), 1px 1px 0 #000;
+  pointer-events: none;
+  z-index: 15;
+  animation: damageFloat 0.9s ease-out forwards;
+}
+
+.damage-number.player-hit {
+  color: #e63946;
+}
+
+.damage-number.weak {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.damage-number.heal {
+  color: #2ecc71;
+  font-size: 1rem;
+  text-shadow: 0 0 6px rgba(46,204,113,0.6), 1px 1px 0 #000;
+}
+
+@keyframes damageFloat {
+  0% { opacity: 1; transform: translateY(0) scale(1.2); }
+  60% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-60px) scale(0.8); }
+}
+
+/* ================= MARKETPLACE PANEL ================= */
+#market-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(12px);
+}
+
+.market-content {
+  width: 500px;
+  max-width: 90vw;
+  padding: 30px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(46,204,113,0.3);
+  border-radius: 16px;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.market-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.market-header h2 {
+  font-family: 'Orbitron', sans-serif;
+  color: #2ecc71;
+  font-size: 1.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.close-btn:hover { opacity: 1; }
+
+.market-charity-opt {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 6px;
+}
+.market-charity-select {
+  width: 100%;
+  max-width: 280px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  background: #1a1a2e;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #eee;
+  font-size: 0.9rem;
+}
+.market-desc {
+  color: #aaa;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+.market-sale-type {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.market-sale-type label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ccc;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.market-charity-wrap {
+  margin-bottom: 15px;
+}
+.market-charity-wrap.hidden {
+  display: none !important;
+}
+.market-charity-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  max-height: 150px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+.market-charity-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.market-charity-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(46, 204, 113, 0.5);
+}
+.market-charity-card.selected {
+  background: rgba(46, 204, 113, 0.15);
+  border-color: #2ecc71;
+}
+.market-charity-card h4 {
+  font-size: 0.95rem;
+  color: #2ecc71;
+  margin-bottom: 4px;
+}
+.market-charity-card .charity-mission {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.market-charity-card .charity-wallet {
+  font-size: 0.75rem;
+  color: #888;
+  font-family: monospace;
+}
+.market-charity-wrap.hidden {
+    display: none !important;
+}
+
+.market-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.market-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.05);
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.item-icon {
+  font-size: 2rem;
+}
+
+.item-details h4 {
+  font-size: 1.1rem;
+  color: #fff;
+}
+
+.item-details p {
+  color: #a855f7;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.market-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.list-btn, .approve-btn {
+  padding: 8px 15px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.list-btn {
+  background: #2ecc71;
+  color: #000;
+}
+
+.approve-btn {
+  background: transparent;
+  border: 1px solid #2ecc71;
+  color: #2ecc71;
+}
+
+.market-status {
+  margin-top: 15px;
+  padding: 10px;
+  background: rgba(46,204,113,0.1);
+  color: #2ecc71;
+  border: 1px solid #2ecc71;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.hud-btn {
+  padding: 0 15px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  background: rgba(46,204,113,0.15);
+  color: #2ecc71;
+  border: 1px solid #2ecc71;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.hud-btn:hover {
+  background: rgba(46,204,113,0.3);
+}
+
+/* Marketplace Tabs */
+.market-tabs {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  margin: 0 15px;
+}
+
+.market-tab {
+  padding: 6px 18px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background: transparent;
+  color: #888;
+  border: 1px solid #333;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.market-tab.active {
+  background: rgba(168, 85, 247, 0.2);
+  color: #a855f7;
+  border-color: #a855f7;
+}
+
+.tab-pane {
+  display: block;
+}
+
+.tab-pane.hidden {
+  display: none;
+}
+
+/* Make market-header use flex to align tabs */
+.market-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ================= GUILDS & CHARITIES PANELS ================= */
+.guilds-panel,
+.charities-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 20px;
+}
+
+.guild-panel-inner,
+.charity-panel-inner {
+  max-width: 520px;
+  width: 100%;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  border: 1px solid rgba(137, 87, 229, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+  color: #eee;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+.charity-panel-inner {
+  border-color: rgba(231, 76, 60, 0.3);
+}
+
+.guild-header,
+.charity-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.guild-header h2,
+.charity-header h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.4rem;
+  color: #fff;
+}
+
+.guild-desc,
+.charity-desc,
+.guild-meta,
+.charity-meta {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 1rem;
+}
+
+.guild-wallet-line {
+  font-size: 0.85rem;
+  color: #8957e5;
+  margin-bottom: 0.75rem;
+}
+.guild-wallet-addr {
+  font-family: monospace;
+  font-weight: 600;
+}
+.guild-creator-note {
+  font-size: 0.85rem;
+  color: #f7c948;
+  margin: 0.5rem 0;
+}
+.guild-btn-danger {
+  background: rgba(231, 76, 60, 0.2);
+  border-color: #e74c3c;
+  color: #f5b7b1;
+  margin-top: 0.5rem;
+}
+.guild-btn-danger:hover {
+  background: rgba(231, 76, 60, 0.35);
+}
+.guild-btn-outline {
+  background: transparent;
+  border-color: #8957e5;
+  color: #c4b5fd;
+  margin-top: 0.25rem;
+}
+.guild-btn.small {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+}
+.guild-search-input {
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  background: #0d0d1a;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.9rem;
+}
+.guild-msg-own {
+  background: rgba(137, 87, 229, 0.2);
+  border-left: 3px solid #8957e5;
+  padding-left: 8px;
+  margin-left: 4px;
+}
+.guild-msg-time {
+  display: block;
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 2px;
+}
+
+.guild-warn,
+.charity-warn {
+  color: #f7c948;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.guild-btn,
+.charity-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #444;
+  background: #2a2a4a;
+  color: #ddd;
+  transition: all 0.2s;
+}
+
+.guild-btn-close,
+.charity-btn-close {
+  background: transparent;
+  border-color: #555;
+  padding: 6px 12px;
+}
+
+.guild-btn-primary,
+.charity-btn-primary {
+  background: rgba(137, 87, 229, 0.25);
+  border-color: #8957e5;
+  color: #c4b5fd;
+}
+
+.charity-btn-danger {
+  background: rgba(231, 76, 60, 0.2);
+  border-color: #e74c3c;
+  color: #f5b7b1;
+}
+.charity-btn.small {
+  font-size: 0.8rem;
+  padding: 4px 10px;
+}
+
+.guild-btn-small {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+}
+
+.guild-form,
+.charity-form {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+
+.guild-form h3,
+.charity-form h3 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.guild-form input,
+.guild-form textarea,
+.charity-form input,
+.charity-form textarea {
+  width: 100%;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background: #0d0d1a;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.guild-form-actions,
+.charity-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.guild-list,
+.guild-polls-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+.guild-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.guild-card-name {
+  font-weight: 600;
+}
+
+.guild-empty,
+.charity-empty {
+  color: #888;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.guild-back-btn {
+  background: none;
+  border: none;
+  color: #8957e5;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.guild-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 1rem 0;
+}
+
+.guild-tab {
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.guild-tab.active {
+  background: rgba(137, 87, 229, 0.2);
+  color: #c4b5fd;
+  border-color: #8957e5;
+}
+
+.guild-tab-pane {
+  display: block;
+}
+
+.guild-chat-messages {
+  height: 220px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.guild-msg {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.guild-msg-addr {
+  color: #8957e5;
+  margin-right: 8px;
+}
+
+.guild-chat-send {
+  display: flex;
+  gap: 8px;
+}
+
+.guild-chat-send input {
+  flex: 1;
+  padding: 8px 12px;
+  background: #0d0d1a;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.guild-poll {
+  padding: 12px;
+  margin-bottom: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.guild-poll-q {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.guild-poll-opt {
+  margin: 6px 0;
+}
+
+.guild-poll-vote-btn {
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  background: #1a1a2e;
+  border: 1px solid #444;
+  border-radius: 6px;
+  color: #ddd;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.guild-poll-vote-btn.voted,
+.guild-poll-vote-btn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.guild-poll-meta {
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 8px;
+}
+
+.charity-search {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 1rem;
+  background: #0d0d1a;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.charity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.charity-card {
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.charity-card-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+
+.charity-card-mission {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 6px;
+}
+
+.charity-card-wallet {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.charity-card-link {
+  display: inline-block;
+  margin-top: 6px;
+  color: #e74c3c;
+  font-size: 0.85rem;
+}

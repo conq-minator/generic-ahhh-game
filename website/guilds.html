@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guilds & Charities | GAME V3</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .charity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+        .charity-card {
+            background: rgba(20, 10, 30, 0.4);
+            border: 1px solid rgba(255, 0, 255, 0.2);
+            border-radius: 12px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all var(--transition-fast);
+        }
+        .charity-card:hover {
+            transform: translateY(-5px);
+            background: rgba(30, 15, 40, 0.6);
+            border-color: rgba(255, 0, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(255, 0, 255, 0.1);
+        }
+        .charity-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Canvas -->
+    <canvas id="particles-bg"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">GAME<span class="highlight-cyan"> V3</span></div>
+        <ul class="nav-links">
+            <li><a href="index.html#home" class="nav-item">Home</a></li>
+            <li><a href="index.html#about" class="nav-item">About</a></li>
+            <li><a href="guilds.html" class="nav-item highlight-cyan" style="color: var(--neon-cyan);">Guilds & Charities</a></li>
+        </ul>
+        <div class="nav-actions">
+            <!-- Directly redirects to the game loader -->
+            <a href="game.html" class="nav-btn">PLAY NOW</a>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <section class="container" style="padding-top: 150px; min-height: auto; text-align: center;">
+        <h1 class="hero-title" style="font-size: 4rem;">FIGHT FOR <br><span class="highlight-magenta">A CAUSE</span></h1>
+        <p class="section-subtitle">Join a guild, conquer dungeons, and make a real-world impact through decentralized charity.</p>
+    </section>
+
+    <!-- The System Explanation -->
+    <section class="container reveal">
+        <div class="glass-panel">
+            <h2 class="orbitron" style="font-size: 2rem; color: var(--neon-cyan); margin-bottom: 20px; text-align: center;">HOW IT WORKS</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px; text-align: center;">
+                <div>
+                    <div style="font-size: 2rem; color: #fff; margin-bottom: 15px;">01</div>
+                    <h3 class="orbitron" style="color: var(--neon-magenta); margin-bottom: 10px;">FORM A GUILD</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Band together with other slayers. Share resources, tactics, and conquer the hardest bosses.</p>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; color: #fff; margin-bottom: 15px;">02</div>
+                    <h3 class="orbitron" style="color: var(--neon-magenta); margin-bottom: 10px;">TRADE NFTs</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Buy, sell, and trade your hard-earned loot on the native Web3 marketplace via MetaMask.</p>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; color: #fff; margin-bottom: 15px;">03</div>
+                    <h3 class="orbitron" style="color: var(--neon-magenta); margin-bottom: 10px;">AUTO DONATIONS</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">A percentage of every marketplace transaction fee is securely routed to verified charity smart contracts.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Charities -->
+    <section class="container reveal">
+        <h2 class="section-title">VERIFIED <span class="highlight-magenta">CHARITIES</span></h2>
+        <p class="section-subtitle">Organizations currently supported by the GAME V3 Treasury Smart Contracts.</p>
+        
+        <div class="charity-grid">
+            <div class="charity-card">
+                <div class="charity-icon">🌍</div>
+                <h3 class="orbitron" style="font-size: 1.2rem; color: #fff; margin-bottom: 15px;">Global Green Initiative</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">Dedicated to reforestation and ocean cleanup efforts worldwide via transparent on-chain funding.</p>
+            </div>
+            <div class="charity-card">
+                <div class="charity-icon">🏥</div>
+                <h3 class="orbitron" style="font-size: 1.2rem; color: #fff; margin-bottom: 15px;">Med-Decentralized</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">Providing vital medical supplies to underprivileged regions using borderless crypto transactions.</p>
+            </div>
+            <div class="charity-card">
+                <div class="charity-icon">📚</div>
+                <h3 class="orbitron" style="font-size: 1.2rem; color: #fff; margin-bottom: 15px;">Code For Tomorrow</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">Funding technology education and hardware for students in developing nations.</p>
+            </div>
+        </div>
+    </section>
+
+    <div style="text-align: center; padding: 50px 0 100px 0;" class="reveal">
+        <a href="game.html" class="btn-primary">START YOUR JOURNEY</a>
+        <a href="marketplace.html" class="btn-secondary" style="margin-left: 20px;">VISIT MARKETPLACE</a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">GAME V3</div>
+        <p class="footer-text">© 2026 GAME V3 Web3 RPG. By gamers, for the community.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+</body>
+</html>

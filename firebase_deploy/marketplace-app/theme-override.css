@@ -1,0 +1,191 @@
+/* ==========================================================================
+   MARKETPLACE UI: AAA THEME OVERRIDE
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;500;700;900&display=swap');
+
+:root {
+  /* Override Default Variables */
+  --bg-color: #050510;
+  --panel-bg: rgba(10, 10, 25, 0.7);
+  --card-bg: rgba(20, 20, 40, 0.5);
+  --text-primary: #e0e0e0;
+  --text-secondary: #8892b0;
+  --border-color: rgba(0, 255, 255, 0.2);
+  
+  --accent-primary: #00ffff;
+  --accent-hover: rgba(0, 255, 255, 0.8);
+  --success: #2ecc71;
+  --success-hover: #27ae60;
+  --warning: #f7c948;
+  --error: #e63946;
+  --surface-overlay: rgba(5, 5, 16, 0.9);
+
+  --neon-magenta: #ff00ff;
+  --glow-cyan: 0 0 15px rgba(0, 255, 255, 0.5);
+  --glow-magenta: 0 0 15px rgba(255, 0, 255, 0.5);
+  --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 255, 255, 0.05);
+}
+
+body {
+  background-image: radial-gradient(circle at center, rgba(10, 10, 30, 0.85) 0%, var(--bg-color) 100%) !important;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Orbitron', sans-serif !important;
+  text-transform: uppercase;
+}
+
+/* Header Upgrades */
+.header-content {
+  background: var(--panel-bg) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+.logo h1 {
+  color: #fff;
+  letter-spacing: 2px;
+}
+
+.logo .highlight {
+  color: var(--neon-magenta) !important;
+  text-shadow: var(--glow-magenta) !important;
+}
+
+.wallet-address {
+  background: rgba(0, 255, 255, 0.1) !important;
+  border-color: var(--neon-cyan) !important;
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.5) !important;
+}
+
+/* Panels and Layouts */
+.panel {
+  background: var(--panel-bg) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+.panel-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.panel-header h2 {
+  color: var(--accent-primary) !important;
+  text-shadow: var(--glow-cyan) !important;
+}
+
+.listings-section {
+  background: var(--panel-bg) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--glass-shadow) !important;
+}
+
+/* Cards */
+.card, .listing-card {
+  background: var(--card-bg) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(4px) !important;
+  transition: all 0.3s ease !important;
+}
+
+.card:hover, .listing-card:hover {
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 255, 255, 0.1) !important;
+  transform: translateY(-4px) !important;
+}
+
+.card h3 {
+  color: var(--neon-magenta) !important;
+  text-shadow: var(--glow-magenta) !important;
+}
+
+.buy-card h3 {
+  color: var(--success) !important;
+  text-shadow: 0 0 10px rgba(46, 204, 113, 0.6) !important;
+}
+
+/* Inputs and Selects */
+input, select {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+input:focus, select:focus {
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.2) !important;
+}
+
+.filter-input, .filter-select {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Buttons */
+.btn {
+  font-family: 'Orbitron', sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn.primary {
+  background: transparent !important;
+  border: 2px solid var(--accent-primary) !important;
+  color: var(--accent-primary) !important;
+  box-shadow: inset 0 0 5px rgba(0, 255, 255, 0.2) !important;
+}
+
+.btn.primary:hover {
+  background: rgba(0, 255, 255, 0.1) !important;
+  box-shadow: var(--glow-cyan), inset 0 0 10px rgba(0, 255, 255, 0.4) !important;
+  color: #fff !important;
+}
+
+.btn.action {
+  background: var(--neon-magenta) !important;
+  color: #000 !important;
+  border: none !important;
+}
+
+.btn.action:hover {
+  box-shadow: var(--glow-magenta) !important;
+  background: #ff33ff !important;
+}
+
+.btn.success {
+  background: var(--success) !important;
+  color: #000 !important;
+}
+
+.btn.success:hover {
+  box-shadow: 0 0 15px rgba(46, 204, 113, 0.6) !important;
+}
+
+.btn.outline {
+  border-color: var(--accent-primary) !important;
+  color: var(--accent-primary) !important;
+}
+
+.btn.outline:hover {
+  background: rgba(0, 255, 255, 0.1) !important;
+  box-shadow: var(--glow-cyan) !important;
+  color: #fff !important;
+}
+
+/* Popups / Badges / Etc */
+.badge {
+  background: rgba(255, 0, 255, 0.1) !important;
+  color: var(--neon-magenta) !important;
+  border: 1px solid var(--neon-magenta) !important;
+}
+
+.tx-popup {
+  background: var(--panel-bg) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid var(--accent-primary) !important;
+  box-shadow: var(--glow-cyan) !important;
+}

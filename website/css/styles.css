@@ -1,0 +1,525 @@
+/* ==========================================================================
+   Base Styles & Variables
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;500;700;900&display=swap');
+
+:root {
+    --bg-dark: #050510;
+    --bg-panel: rgba(10, 10, 25, 0.7);
+    --neon-cyan: #00ffff;
+    --neon-magenta: #ff00ff;
+    --text-main: #e0e0e0;
+    --text-muted: #8892b0;
+    --glow-cyan: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3);
+    --glow-magenta: 0 0 10px rgba(255, 0, 255, 0.5), 0 0 20px rgba(255, 0, 255, 0.3);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+    --transition-fast: 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .orbitron {
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* ==========================================================================
+   Background & Canvas
+   ========================================================================== */
+#particles-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: radial-gradient(circle at center, #0a0a20 0%, #050510 100%);
+}
+
+/* ==========================================================================
+   Navigation
+   ========================================================================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 20px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    transition: all 0.4s ease;
+    background: transparent;
+}
+
+.navbar.scrolled {
+    background: rgba(5, 5, 16, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: var(--glass-border);
+    padding: 15px 50px;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: var(--glow-cyan);
+    letter-spacing: 2px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-item {
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    position: relative;
+    padding: 5px 0;
+    transition: color var(--transition-fast);
+}
+
+.nav-item:hover {
+    color: var(--neon-cyan);
+}
+
+.nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--neon-cyan);
+    transition: width var(--transition-fast);
+    box-shadow: 0 0 8px var(--neon-cyan);
+}
+
+.nav-item:hover::after {
+    width: 100%;
+}
+
+.nav-btn {
+    padding: 10px 20px;
+    border: 1px solid var(--neon-magenta);
+    border-radius: 4px;
+    color: var(--neon-magenta);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background: transparent;
+    transition: all var(--transition-fast);
+    cursor: pointer;
+    box-shadow: inset 0 0 0 rgba(255, 0, 255, 0);
+}
+
+.nav-btn:hover {
+    background: rgba(255, 0, 255, 0.1);
+    box-shadow: inset 0 0 10px rgba(255, 0, 255, 0.5), 0 0 15px rgba(255, 0, 255, 0.4);
+    text-shadow: 0 0 5px #fff;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn-primary {
+    display: inline-block;
+    padding: 15px 40px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #050510;
+    background: var(--neon-cyan);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s ease;
+    z-index: -1;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.7);
+    transform: translateY(-2px);
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 15px 40px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #fff;
+    background: transparent;
+    border: 2px solid var(--neon-magenta);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 10px rgba(255, 0, 255, 0.2);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 0, 255, 0.1);
+    box-shadow: inset 0 0 20px rgba(255, 0, 255, 0.5), 0 0 20px rgba(255, 0, 255, 0.4);
+    text-shadow: 0 0 8px #fff;
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   Sections & Layout
+   ========================================================================== */
+section {
+    padding: 100px 50px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.section-title {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #fff;
+    text-shadow: var(--glow-cyan);
+}
+
+.section-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto 60px auto;
+}
+
+/* Glass Panel */
+.glass-panel {
+    background: var(--bg-panel);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: var(--glass-border);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+}
+
+/* Formatted Text */
+.highlight-cyan { color: var(--neon-cyan); }
+.highlight-magenta { color: var(--neon-magenta); }
+
+/* Hide elements for scroll animation */
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   Hero Section
+   ========================================================================== */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 20px;
+    position: relative;
+}
+
+.hero-content {
+    max-width: 800px;
+    z-index: 10;
+}
+
+.hero-title {
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.6), 0 0 40px rgba(0, 255, 255, 0.4);
+    letter-spacing: 4px;
+}
+
+.hero-tagline {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    font-weight: 300;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* ==========================================================================
+   Features Grid
+   ========================================================================== */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.feature-card {
+    background: rgba(10, 10, 20, 0.6);
+    border: 1px solid rgba(0, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 30px;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+    transform: scaleY(0);
+    transition: transform 0.4s ease;
+    transform-origin: bottom;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    background: rgba(15, 15, 30, 0.8);
+    border-color: rgba(0, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.feature-card:hover::after {
+    transform: scaleY(1);
+    transform-origin: top;
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    color: var(--neon-cyan);
+    margin-bottom: 20px;
+}
+
+.feature-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.feature-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Two Column Layout (Text + Image/Graphic)
+   ========================================================================== */
+.split-section {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.split-content {
+    flex: 1;
+}
+
+.split-visual {
+    flex: 1;
+    position: relative;
+    height: 400px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 0, 255, 0.2);
+    box-shadow: 0 0 30px rgba(255, 0, 255, 0.1);
+    background: linear-gradient(135deg, rgba(20, 10, 30, 0.8), rgba(10, 5, 20, 0.8));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.split-visual::before {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: conic-gradient(transparent, transparent, transparent, var(--neon-magenta));
+    animation: rotate 4s linear infinite;
+    opacity: 0.3;
+}
+
+.split-visual::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    background: #0a0515;
+    border-radius: 10px;
+}
+
+.visual-inner {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    color: var(--neon-magenta);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+@keyframes rotate {
+    100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   CTA Section
+   ========================================================================== */
+.cta-section {
+    text-align: center;
+    padding: 150px 20px;
+    background: linear-gradient(to top, rgba(0, 255, 255, 0.05), transparent);
+    border-top: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.cta-title {
+    font-size: 3.5rem;
+    margin-bottom: 30px;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 50px;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+footer {
+    background: #020205;
+    padding: 50px 20px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.footer-text {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+@media (max-width: 900px) {
+    .split-section {
+        flex-direction: column;
+    }
+    .hero-title {
+        font-size: 3.5rem;
+    }
+    .section-title {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none; /* Add a hamburger menu for mobile if needed */
+    }
+    .hero-buttons {
+        flex-direction: column;
+    }
+    .cta-buttons {
+        flex-direction: column;
+    }
+    .hero-tagline {
+        font-size: 1.2rem;
+    }
+}

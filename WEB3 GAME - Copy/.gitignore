@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Environment variables (CRITICAL: Private keys and API secrets)
+.env
+.env.local
+
+# Build output
+dist/
+build/
+
+# Hardhat specific
+cache/
+artifacts/
+typechain/
+typechain-types/
+coverage/
+coverage.json
+ignition/deployments/
+
+# Web3 specific
+*.keystore
+.secret
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

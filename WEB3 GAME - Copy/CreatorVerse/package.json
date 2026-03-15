@@ -1,0 +1,33 @@
+{
+  "name": "creatorverse",
+  "version": "1.0.0",
+  "description": "CreatorVerse — Web3 gaming platform where players earn gear, mint NFTs, and trade them for charity",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.js --network hardhat",
+    "deploy:amoy": "hardhat run scripts/deploy.js --network amoy",
+    "node": "hardhat node"
+  },
+  "keywords": [
+    "web3",
+    "nft",
+    "gaming",
+    "charity",
+    "polygon",
+    "solidity"
+  ],
+  "author": "CreatorVerse Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^16.3.1",
+    "express": "^5.2.1"
+  }
+}

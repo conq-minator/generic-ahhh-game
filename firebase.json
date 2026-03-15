@@ -1,0 +1,22 @@
+{
+  "hosting": {
+    "public": "website",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "**/.*",
+      "**/node_modules/**",
+      "**/*.env",
+      ".env",
+      ".env.*",
+      "**/cache/**",
+      "**/ignition/**",
+      "WEB3 GAME - Copy/compile_err.txt",
+      "WEB3 GAME - Copy/error_log*.txt",
+      "WEB3 GAME - Copy/deploy_output.txt",
+      "WEB3 GAME - Copy/deploy_marketplace_output.txt",
+      "WEB3 GAME - Copy/found_gitignores.txt"
+    ],
+    "cleanUrls": false
+  }
+}

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charity Marketplace Tester</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="theme-override.css">
+    <!-- Ethers.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.12.0/ethers.umd.min.js"></script>
+    <!-- ABIs -->
+    <script src="abi.js?v=20260315-v4"></script>
+</head>
+<body>
+    <div class="app-container">
+        
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">⚔️</span>
+                    <h1>Charity<span class="highlight">Gear</span></h1>
+                </div>
+                <div class="wallet-controls">
+                    <button id="connectWalletBtn" class="btn primary">Connect MetaMask</button>
+                    <span id="walletAddress" class="wallet-address hidden"></span>
+                </div>
+            </div>
+            
+            <div id="connectionStatus" class="status-banner error">
+                ⚠️ Please connect MetaMask to the Sepolia Network
+            </div>
+        </header>
+
+        <main class="dashboard hidden" id="dashboard">
+            
+            <div class="panel-grid">
+                <!-- GAME GEAR PANEL -->
+                <section class="panel gear-panel">
+                    <div class="panel-header">
+                        <h2>Game Gear NFT</h2>
+                        <span class="badge">Contract: 0x273...</span>
+                    </div>
+
+                    <div class="card">
+                        <h3>Mint New Gear</h3>
+                        <p class="description">Create a new item on the blockchain.</p>
+                        <form id="mintForm">
+                            <input type="text" id="mintImage" placeholder="Image URI (e.g. ipfs://...)" value="ipfs://Qmdummypicture123" required>
+                            <div class="input-row">
+                                <select id="mintRarity" required>
+                                    <option value="1">Common (1)</option>
+                                    <option value="2">Uncommon (2)</option>
+                                    <option value="3">Rare (3)</option>
+                                    <option value="4">Epic (4)</option>
+                                    <option value="5" selected>Legendary (5)</option>
+                                </select>
+                                <input type="number" id="mintAttack" placeholder="Attack Power" value="100" required>
+                            </div>
+                            <button type="submit" class="btn action">Mint Item</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <h3>View Gear Stats</h3>
+                        <form id="statsForm">
+                            <div class="input-row">
+                                <input type="number" id="statsTokenId" placeholder="Token ID" required>
+                                <button type="submit" class="btn outline">Check Stats</button>
+                            </div>
+                        </form>
+                        <div id="statsResult" class="results-box hidden"></div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Upgrade Gear</h3>
+                        <form id="upgradeForm">
+                            <div class="input-row">
+                                <input type="number" id="upgradeTokenId" placeholder="Token ID" required>
+                                <button type="submit" class="btn secondary">Level Up</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </section>
+
+                <!-- MARKETPLACE PANEL -->
+                <section class="panel market-panel">
+                    <div class="panel-header">
+                        <h2>Gear Marketplace</h2>
+                        <span class="badge">90% Charity Split</span>
+                    </div>
+
+                    <div class="card highlight-card">
+                        <h3>1. Approve Marketplace</h3>
+                        <p class="description">You must approve the marketplace to handle your items before selling.</p>
+                        <button id="approveMarketBtn" class="btn primary full-width">Approve Marketplace Transfer</button>
+                    </div>
+
+                    <div class="card">
+                        <h3>2. List Item for Sale</h3>
+                        <p class="description">Use the same contract address shown in your wallet for this NFT. Leave blank for default Game Gear contract.</p>
+                        <form id="listForm">
+                            <div class="input-row">
+                                <label><input type="radio" name="dashboard-sale-type" value="personal" checked> Personal Sale (100% to you)</label>
+                                <label><input type="radio" name="dashboard-sale-type" value="charity"> Charity Sale (90% to charity, 10% to you)</label>
+                            </div>
+                            <div class="input-row hidden" id="dashboard-charity-wrap">
+                                <select id="dashboard-charity-select" class="full-width">
+                                    <option value="">— Loading charities... —</option>
+                                </select>
+                            </div>
+                            <div class="input-row">
+                                <input type="text" id="listNftContract" placeholder="NFT contract (optional, default: BossLootNFT)" class="full-width">
+                            </div>
+                            <div class="input-row">
+                                <input type="number" id="listTokenId" placeholder="Token ID" required>
+                                <input type="text" id="listPrice" placeholder="Price (ETH)" required>
+                            </div>
+                            <button type="submit" class="btn action">List on Market</button>
+                        </form>
+                    </div>
+
+                    <div class="card buy-card">
+                        <h3>Buy an Item (manual)</h3>
+                        <p class="description">Or buy from the list below. 90% goes to charity, 10% to seller.</p>
+                        <form id="buyForm">
+                            <div class="input-row">
+                                <input type="text" id="buyNftContract" placeholder="NFT contract (optional)" class="full-width">
+                            </div>
+                            <div class="input-row">
+                                <input type="number" id="buyTokenId" placeholder="Token ID to Buy" required>
+                                <input type="text" id="buyPrice" placeholder="Price (ETH) to Send" required>
+                            </div>
+                            <button type="submit" class="btn success">Buy Item</button>
+                        </form>
+                    </div>
+
+                </section>
+            </div>
+
+            <!-- Browse & Your Listings (full width) -->
+            <section class="listings-section">
+                <div class="panel-header">
+                    <h2>Browse all listings</h2>
+                    <button type="button" id="refreshListingsBtn" class="btn outline">Refresh</button>
+                </div>
+                <div class="listings-filters">
+                    <input type="text" id="browseSearch" class="filter-input" placeholder="Search by token ID or seller address...">
+                    <select id="browseTypeFilter" class="filter-select" title="Listing type">
+                        <option value="all">All listings</option>
+                        <option value="personal">Personal sale</option>
+                        <option value="charity">Charity sale</option>
+                    </select>
+                </div>
+                <div id="browseListings" class="listings-grid">
+                    <p class="placeholder-text">Connect wallet and click Refresh to load listings.</p>
+                </div>
+
+                <div class="panel-header" style="margin-top: 2rem;">
+                    <h2>Your active listings</h2>
+                </div>
+                <input type="text" id="yourListingsSearch" class="filter-input" placeholder="Filter by token ID...">
+                <div id="yourListings" class="listings-grid">
+                    <p class="placeholder-text">Your listed items appear here. Sold items move to "Your sold items".</p>
+                </div>
+
+                <div class="panel-header" style="margin-top: 2rem;">
+                    <h2>Your sold items</h2>
+                </div>
+                <p class="description">Items you sold. The NFT was transferred to the buyer and no longer appears in your wallet.</p>
+                <input type="text" id="yourSoldSearch" class="filter-input" placeholder="Filter by token ID...">
+                <div id="yourSoldListings" class="listings-grid sold-list">
+                    <p class="placeholder-text">Items you've sold will appear here.</p>
+                </div>
+            </section>
+        </main>
+
+        <div id="txPopup" class="tx-popup hidden">
+            <div class="spinner"></div>
+            <p id="txPopupText">Waiting for confirmation...</p>
+        </div>
+
+    </div>
+
+    <script src="app.js?v=20260315-v3"></script>
+</body>
+</html>

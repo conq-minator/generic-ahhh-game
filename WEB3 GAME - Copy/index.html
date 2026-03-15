@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boss Hunting RPG</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='24' font-size='24'>⚔️</text></svg>" />
+  <meta name="description" content="A 3D browser-based Boss Hunting RPG where players explore caves, defeat bosses, and mint gear as NFTs." />
+  <link rel="stylesheet" href="./src/styles.css" />
+  <link rel="stylesheet" href="./src/theme-override.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js",
+      "three/": "https://cdn.jsdelivr.net/npm/three@0.162.0/",
+      "ethers": "https://cdn.jsdelivr.net/npm/ethers@6.11.0/dist/ethers.min.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas id="game-canvas"></canvas>
+
+  <!-- Start Screen -->
+  <div id="start-screen">
+    <div class="start-content">
+      <h1>BOSS HUNTER</h1>
+      <p class="subtitle">Explore • Fight • Collect</p>
+      <button id="start-btn">START GAME</button>
+      <div style="display: flex; gap: 15px; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;">
+        <button id="connect-wallet-btn" style="margin: 0;">🦊 Connect Wallet</button>
+        <button id="start-market-btn" class="hidden" style="margin: 0; padding: 10px 30px; font-family: 'Orbitron', sans-serif; font-weight: 700; background: rgba(46,204,113,0.15); color: #2ecc71; border: 1px solid #2ecc71; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(4px);">⚖️ Charity Market</button>
+        <button id="guilds-btn" style="margin: 0; padding: 10px 30px; font-family: 'Orbitron', sans-serif; font-weight: 700; background: rgba(137,87,229,0.15); color: #8957e5; border: 1px solid #8957e5; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(4px);">🏰 Guilds</button>
+        <button id="charities-btn" style="margin: 0; padding: 10px 30px; font-family: 'Orbitron', sans-serif; font-weight: 700; background: rgba(231,76,60,0.15); color: #e74c3c; border: 1px solid #e74c3c; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(4px);">❤️ Charities</button>
+      </div>
+      <p class="instructions">WASD — Move &nbsp;|&nbsp; Mouse — Look &nbsp;|&nbsp; Click — Attack &nbsp;|&nbsp; Space — Dodge</p>
+    </div>
+  </div>
+
+  <!-- HUD Overlay -->
+  <div id="hud" class="hidden">
+    <!-- Player Health -->
+    <div id="player-hud">
+      <div class="player-health-label">HP</div>
+      <div class="health-bar-container">
+        <div id="player-health-bar" class="health-bar-fill"></div>
+      </div>
+      <span id="player-health-text">100 / 100</span>
+    </div>
+
+    <!-- Equipped Sword -->
+    <div id="sword-indicator" class="hidden">
+      <span id="sword-name">No Sword</span>
+    </div>
+
+    <!-- Crosshair -->
+    <div id="crosshair">+</div>
+
+    <!-- Boss Health Bar -->
+    <div id="boss-hud" class="hidden">
+      <div id="boss-name">BOSS</div>
+      <div class="boss-health-container">
+        <div id="boss-health-bar" class="health-bar-fill"></div>
+      </div>
+    </div>
+
+    <!-- Notifications -->
+    <div id="notification-container"></div>
+
+    <!-- Inventory Hint -->
+    <div id="inventory-hint">
+      <div id="gear-slots"></div>
+      <button id="open-market-btn" class="hud-btn hidden">⚖️ Market</button>
+    </div>
+
+    <!-- Minimap -->
+    <canvas id="minimap" width="160" height="160"></canvas>
+  </div>
+
+  <!-- Loot Panel -->
+  <div id="loot-panel" class="hidden">
+    <div class="loot-content">
+      <h2>⚔️ BOSS DEFEATED!</h2>
+      <div id="loot-icon"></div>
+      <div id="loot-name"></div>
+      <div id="loot-rarity"></div>
+      <div id="loot-description"></div>
+      <button id="mint-nft-btn">🔗 Mint as NFT</button>
+      <button id="continue-btn">Continue Playing</button>
+    </div>
+  </div>
+
+  <!-- Death Screen -->
+  <div id="death-screen" class="hidden">
+    <div class="death-content">
+      <h2>💀 YOU DIED</h2>
+      <p>Prepare yourself and try again.</p>
+      <button id="respawn-btn">Respawn</button>
+    </div>
+  </div>
+
+  <!-- Guilds Panel (new) -->
+  <div id="guilds-panel" class="guilds-panel hidden"></div>
+
+  <!-- Charities Panel (new) -->
+  <div id="charities-panel" class="charities-panel hidden"></div>
+
+  <!-- Marketplace Panel -->
+  <div id="market-panel" class="hidden">
+    <div class="market-content">
+      <div class="market-header">
+        <h2>⚖️ CHARITY MARKETPLACE</h2>
+        <div class="market-tabs">
+          <button class="market-tab active" data-tab="my-items">My Items</button>
+          <button class="market-tab" data-tab="full-market">Full Market</button>
+        </div>
+        <button id="close-market-btn" class="close-btn">✕</button>
+      </div>
+
+      <!-- My Items Tab -->
+      <div id="tab-my-items" class="tab-pane active">
+        <p class="market-desc">Choose how to list: Personal (100% to you) or Charity (90% to charity, 10% to you).</p>
+        <div class="market-sale-type">
+          <label><input type="radio" name="sale-type" value="personal" checked> Personal sale (100% to you)</label>
+          <label><input type="radio" name="sale-type" value="charity"> Charity sale (90% charity, 10% to you)</label>
+        </div>
+        <div id="market-charity-wrap" class="market-charity-wrap hidden">
+          <p class="market-charity-opt">Select a registered charity to receive 90%:</p>
+          <div id="market-charity-list" class="market-charity-list">
+            <!-- Charity cards will be rendered here -->
+          </div>
+        </div>
+        <div id="market-items-list" class="market-items-list"></div>
+        <div id="market-status" class="market-status hidden"></div>
+      </div>
+
+      <!-- Full Market Tab (CharityBlockchain frontend embedded) -->
+      <div id="tab-full-market" class="tab-pane hidden">
+        <iframe id="charity-iframe" src="./CharityBlockchainProject/frontend/index.html"
+          style="width:100%;height:500px;border:none;border-radius:8px;background:#0a0a0a;">
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

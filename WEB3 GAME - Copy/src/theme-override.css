@@ -1,0 +1,194 @@
+/* ==========================================================================
+   GAME UI: AAA THEME OVERRIDE
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;500;700;900&display=swap');
+
+:root {
+  --neon-cyan: #00ffff;
+  --neon-magenta: #ff00ff;
+  --bg-dark: #050510;
+  --panel-bg: rgba(10, 10, 25, 0.7);
+  --glass-border: 1px solid rgba(0, 255, 255, 0.2);
+  --glow-cyan: 0 0 15px rgba(0, 255, 255, 0.5);
+  --glow-magenta: 0 0 15px rgba(255, 0, 255, 0.5);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+h1, h2, h3, h4, .orbitron {
+  font-family: 'Orbitron', sans-serif !important;
+}
+
+/* Base Start Screen Upgrade */
+#start-screen {
+  background: radial-gradient(circle at center, rgba(10, 10, 30, 0.85) 0%, var(--bg-dark) 100%) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.start-content h1 {
+  background: linear-gradient(135deg, var(--neon-cyan), #ffffff) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  text-shadow: var(--glow-cyan) !important;
+  letter-spacing: 6px !important;
+}
+
+.start-content .subtitle {
+  color: var(--neon-cyan) !important;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.5) !important;
+}
+
+#start-btn {
+  background: transparent !important;
+  border: 2px solid var(--neon-cyan) !important;
+  color: var(--neon-cyan) !important;
+  box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.2) !important;
+}
+
+#start-btn:hover {
+  background: rgba(0, 255, 255, 0.1) !important;
+  box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.5), 0 0 25px rgba(0, 255, 255, 0.6) !important;
+  color: #fff !important;
+  text-shadow: 0 0 8px #fff !important;
+}
+
+#connect-wallet-btn, #start-market-btn, #guilds-btn, #charities-btn {
+  background: transparent !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+}
+
+#connect-wallet-btn:hover, #start-market-btn:hover, #guilds-btn:hover, #charities-btn:hover {
+  border-color: var(--neon-magenta) !important;
+  box-shadow: var(--glow-magenta) !important;
+  background: rgba(255, 0, 255, 0.1) !important;
+}
+
+/* Glass Panels: HUD & Menus */
+.loot-content, .market-content, .death-content, .guilds-panel, .charities-panel {
+  background: var(--panel-bg) !important;
+  backdrop-filter: blur(16px) !important;
+  border: var(--glass-border) !important;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(0, 255, 255, 0.05) !important;
+  border-radius: 12px !important;
+}
+
+/* Reskin Health Bars */
+.player-health-label {
+  color: var(--neon-cyan) !important;
+  text-shadow: 0 0 5px var(--neon-cyan) !important;
+}
+
+.health-bar-container {
+  border: 1px solid rgba(0, 255, 255, 0.3) !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+
+#player-health-bar {
+  background: linear-gradient(90deg, #0088ff, var(--neon-cyan)) !important;
+  box-shadow: 0 0 10px var(--neon-cyan) !important;
+}
+
+#boss-name {
+  color: var(--neon-magenta) !important;
+  text-shadow: var(--glow-magenta) !important;
+}
+
+.boss-health-container {
+  border: 1px solid rgba(255, 0, 255, 0.3) !important;
+}
+
+#boss-health-bar {
+  background: linear-gradient(90deg, #aa00ff, var(--neon-magenta)) !important;
+  box-shadow: 0 0 15px var(--neon-magenta) !important;
+}
+
+/* Gear & Icons */
+#sword-indicator {
+  background: rgba(0, 255, 255, 0.1) !important;
+  border: 1px solid var(--neon-cyan) !important;
+  color: var(--neon-cyan) !important;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.2) !important;
+}
+
+#gear-slots .gear-slot {
+  border: 1px solid rgba(255,255,255,0.2) !important;
+  background: rgba(0,0,0,0.5) !important;
+}
+
+#gear-slots .gear-slot.active {
+  border-color: var(--neon-cyan) !important;
+  background: rgba(0, 255, 255, 0.1) !important;
+  box-shadow: 0 0 10px var(--neon-cyan) !important;
+}
+
+/* Action Buttons (Mint, Respawn, HUD btn) */
+#mint-nft-btn, #respawn-btn {
+  background: var(--neon-magenta) !important;
+  color: #000 !important;
+  box-shadow: var(--glow-magenta) !important;
+  border-radius: 4px !important;
+}
+
+#mint-nft-btn:hover, #respawn-btn:hover {
+  box-shadow: 0 0 25px rgba(255, 0, 255, 0.8) !important;
+  transform: translateY(-2px);
+}
+
+.hud-btn {
+  background: transparent !important;
+  border: 1px solid var(--neon-cyan) !important;
+  color: var(--neon-cyan) !important;
+  box-shadow: inset 0 0 5px rgba(0, 255, 255, 0.2) !important;
+}
+
+.hud-btn:hover {
+  background: rgba(0, 255, 255, 0.2) !important;
+  box-shadow: var(--glow-cyan) !important;
+}
+
+/* Minimap */
+#minimap {
+  border: 2px solid var(--neon-cyan) !important;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3) !important;
+}
+
+/* Specific internal overrides for Market & Charity cards inside game */
+.market-header h2, .loot-content h2, .death-content h2 {
+  font-family: 'Orbitron', sans-serif !important;
+}
+
+.market-header h2 { color: var(--neon-cyan) !important; text-shadow: var(--glow-cyan) !important; }
+.loot-content h2 { color: #f7c948 !important; text-shadow: 0 0 15px rgba(247, 201, 72, 0.5) !important; }
+.death-content h2 { color: #ff0055 !important; text-shadow: 0 0 20px rgba(255, 0, 85, 0.6) !important; }
+
+/* Market elements */
+.market-tab.active {
+  background: rgba(0, 255, 255, 0.15) !important;
+  color: var(--neon-cyan) !important;
+  border-color: var(--neon-cyan) !important;
+}
+
+.market-item, .market-charity-card {
+  background: rgba(0,0,0,0.4) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+.market-item:hover, .market-charity-card:hover {
+  border-color: var(--neon-cyan) !important;
+  background: rgba(0, 255, 255, 0.05) !important;
+}
+
+.list-btn, .approve-btn {
+  border-radius: 4px !important;
+  font-family: 'Orbitron', sans-serif !important;
+}
+
+.list-btn { background: var(--neon-cyan) !important; color: #000 !important; }
+.list-btn:hover { box-shadow: var(--glow-cyan) !important; }
+
+.approve-btn { border-color: var(--neon-cyan) !important; color: var(--neon-cyan) !important; }
+.approve-btn:hover { background: rgba(0, 255, 255, 0.1) !important; box-shadow: var(--glow-cyan) !important; }

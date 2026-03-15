@@ -1,0 +1,381 @@
+/* =====================================================
+   CreatorVerse — Styles
+   ===================================================== */
+
+/* ---- Global ---- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/* ---- Scrollbar ---- */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.02);
+    border-radius: 999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* ---- Pages ---- */
+.page {
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.page.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ---- Navigation Links ---- */
+.nav-link {
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(156, 163, 175);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.nav-link:hover {
+    color: white;
+    background: rgba(255,255,255,0.05);
+}
+.nav-link.active {
+    color: white;
+    background: rgba(99, 102, 241, 0.15);
+}
+
+.mobile-nav-link {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(156, 163, 175);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.mobile-nav-link:hover {
+    color: white;
+    background: rgba(255,255,255,0.05);
+}
+
+/* ---- Cards ---- */
+.glass-card {
+    background: rgba(30, 27, 46, 0.6);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 1rem;
+    backdrop-filter: blur(20px);
+    transition: all 0.3s ease;
+}
+.glass-card:hover {
+    border-color: rgba(255,255,255,0.1);
+    transform: translateY(-2px);
+}
+
+.stat-card {
+    background: rgba(30, 27, 46, 0.8);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    backdrop-filter: blur(20px);
+}
+
+.feature-card {
+    background: rgba(30, 27, 46, 0.4);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+.feature-card:hover {
+    border-color: rgba(255,255,255,0.12);
+    background: rgba(30, 27, 46, 0.6);
+    transform: translateY(-4px);
+}
+
+/* ---- Filter Buttons ---- */
+.filter-btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgb(156, 163, 175);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.filter-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+.filter-btn.active {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.4);
+    color: white;
+}
+
+/* ---- NFT Card ---- */
+.nft-card {
+    background: rgba(30, 27, 46, 0.6);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.nft-card:hover {
+    border-color: rgba(255,255,255,0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.nft-card .nft-image {
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.rarity-legendary { background: linear-gradient(135deg, rgba(251,191,36,0.15), rgba(245,158,11,0.05)); }
+.rarity-epic { background: linear-gradient(135deg, rgba(168,85,247,0.15), rgba(139,92,246,0.05)); }
+.rarity-rare { background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(37,99,235,0.05)); }
+.rarity-common { background: linear-gradient(135deg, rgba(156,163,175,0.15), rgba(107,114,128,0.05)); }
+
+.rarity-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+}
+.rarity-badge.legendary { background: rgba(251,191,36,0.3); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.rarity-badge.epic { background: rgba(168,85,247,0.3); color: #a855f7; border: 1px solid rgba(168,85,247,0.3); }
+.rarity-badge.rare { background: rgba(59,130,246,0.3); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
+.rarity-badge.common { background: rgba(156,163,175,0.3); color: #9ca3af; border: 1px solid rgba(156,163,175,0.3); }
+
+/* ---- Modal ---- */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+.modal-overlay.hidden { display: none; }
+
+.modal-content {
+    background: #1e1b2e;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 480px;
+    animation: modalIn 0.3s ease;
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ---- Hero Grid ---- */
+.hero-grid {
+    background-image:
+        linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+}
+
+/* ---- Inventory Item ---- */
+.inventory-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s ease;
+}
+.inventory-item:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.1);
+}
+
+/* ---- Donation Row ---- */
+.donation-row {
+    background: rgba(30, 27, 46, 0.6);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    transition: all 0.2s ease;
+}
+.donation-row:hover {
+    border-color: rgba(16, 185, 129, 0.2);
+    background: rgba(16, 185, 129, 0.03);
+}
+
+/* ---- Proposal Card ---- */
+.proposal-card {
+    background: rgba(30, 27, 46, 0.6);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+.proposal-card:hover {
+    border-color: rgba(255,255,255,0.1);
+}
+
+.vote-bar {
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.05);
+    overflow: hidden;
+    position: relative;
+}
+.vote-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.5s ease;
+}
+
+/* ---- Guild Row ---- */
+.guild-row {
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.2s ease;
+}
+.guild-row:hover {
+    background: rgba(255,255,255,0.02);
+}
+.guild-row:last-child {
+    border-bottom: none;
+}
+
+/* ---- Tip Item ---- */
+.tip-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    transition: all 0.2s;
+}
+.tip-item:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+/* ---- Streamer Card ---- */
+.streamer-card {
+    background: rgba(30, 27, 46, 0.6);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.streamer-card:hover {
+    border-color: rgba(255,255,255,0.12);
+    transform: translateY(-4px);
+}
+
+/* ---- Animations ---- */
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fade-in 0.6s ease forwards; }
+.animate-fade-in-up { animation: fade-in-up 0.6s ease forwards; }
+
+.animation-delay-200 { animation-delay: 0.2s; opacity: 0; }
+.animation-delay-400 { animation-delay: 0.4s; opacity: 0; }
+.animation-delay-2000 { animation-delay: 2s; }
+.animation-delay-4000 { animation-delay: 4s; }
+
+@keyframes pulse-slow {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+}
+.animate-pulse-slow { animation: pulse-slow 6s ease-in-out infinite; }
+
+@keyframes bounce-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+.animate-bounce-slow { animation: bounce-slow 2s ease-in-out infinite; }
+
+/* ---- Shake animation for damage ---- */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+    20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+.animate-shake {
+    animation: shake 0.5s ease;
+}
+
+/* ---- Toast ---- */
+@keyframes toast-in {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+#toast:not(.hidden) > div {
+    animation: toast-in 0.3s ease;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+    .stat-card {
+        padding: 1rem;
+    }
+    .stat-card .text-3xl {
+        font-size: 1.25rem;
+    }
+}

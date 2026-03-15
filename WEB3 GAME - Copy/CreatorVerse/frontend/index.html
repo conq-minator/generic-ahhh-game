@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreatorVerse — Web3 Gaming for Charity</title>
+    <meta name="description" content="CreatorVerse is a Web3 gaming platform where players earn gear, mint NFTs, and trade them to support charity. Play. Earn. Donate.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- TailwindCSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: { 50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81' },
+                        accent: { 50:'#fdf4ff',100:'#fae8ff',200:'#f5d0fe',300:'#f0abfc',400:'#e879f9',500:'#d946ef',600:'#c026d3',700:'#a21caf',800:'#86198f',900:'#701a75' },
+                        cyber: { 50:'#ecfdf5',100:'#d1fae5',200:'#a7f3d0',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857',800:'#065f46',900:'#064e3b' },
+                        surface: { 800:'#1e1b2e', 900:'#0f0d1a', 950:'#0a0814' },
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Ethers.js for Web3 -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.9.0/dist/ethers.umd.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-surface-950 text-white font-sans antialiased">
+
+    <!-- ===================== NAVIGATION ===================== -->
+    <nav id="main-nav" class="fixed top-0 w-full z-50 bg-surface-950/80 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="#" onclick="navigate('home')" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-display font-bold text-sm group-hover:scale-110 transition-transform">CV</div>
+                    <span class="font-display text-lg font-bold bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">CreatorVerse</span>
+                </a>
+                <div class="hidden md:flex items-center gap-1">
+                    <button onclick="navigate('home')" class="nav-link active" data-page="home">Home</button>
+                    <button onclick="navigate('game')" class="nav-link" data-page="game">Game</button>
+                    <button onclick="navigate('marketplace')" class="nav-link" data-page="marketplace">Marketplace</button>
+                    <button onclick="navigate('donations')" class="nav-link" data-page="donations">Donations</button>
+                    <button onclick="navigate('guilds')" class="nav-link" data-page="guilds">Guilds</button>
+                    <button onclick="navigate('streaming')" class="nav-link" data-page="streaming">Streaming</button>
+                    <button onclick="navigate('dao')" class="nav-link" data-page="dao">DAO</button>
+                    <button onclick="navigate('profile')" class="nav-link" data-page="profile">Profile</button>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="wallet-btn" onclick="connectWallet()" class="relative px-5 py-2 rounded-xl font-semibold text-sm bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500 transition-all duration-300 shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 hover:scale-105">
+                        Connect Wallet
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg hover:bg-white/10">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-white/5 bg-surface-900/95 backdrop-blur-xl">
+            <div class="px-4 py-3 space-y-1">
+                <button onclick="navigate('home');toggleMobileMenu()" class="mobile-nav-link">Home</button>
+                <button onclick="navigate('game');toggleMobileMenu()" class="mobile-nav-link">Game</button>
+                <button onclick="navigate('marketplace');toggleMobileMenu()" class="mobile-nav-link">Marketplace</button>
+                <button onclick="navigate('donations');toggleMobileMenu()" class="mobile-nav-link">Donations</button>
+                <button onclick="navigate('guilds');toggleMobileMenu()" class="mobile-nav-link">Guilds</button>
+                <button onclick="navigate('streaming');toggleMobileMenu()" class="mobile-nav-link">Streaming</button>
+                <button onclick="navigate('dao');toggleMobileMenu()" class="mobile-nav-link">DAO</button>
+                <button onclick="navigate('profile');toggleMobileMenu()" class="mobile-nav-link">Profile</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===================== PAGES ===================== -->
+    <main class="pt-16">
+
+        <!-- ===== HOME PAGE ===== -->
+        <section id="page-home" class="page active">
+            <!-- Hero -->
+            <div class="relative min-h-[90vh] flex items-center overflow-hidden">
+                <!-- Animated background -->
+                <div class="absolute inset-0">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary-900/40 via-surface-950 to-accent-900/40"></div>
+                    <div class="hero-grid absolute inset-0"></div>
+                    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-500/20 rounded-full blur-[120px] animate-pulse-slow"></div>
+                    <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-500/20 rounded-full blur-[120px] animate-pulse-slow animation-delay-2000"></div>
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyber-500/10 rounded-full blur-[150px] animate-pulse-slow animation-delay-4000"></div>
+                </div>
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-500/10 border border-primary-500/20 text-primary-300 text-sm font-medium mb-8 animate-fade-in">
+                        <span class="w-2 h-2 rounded-full bg-cyber-400 animate-pulse"></span>
+                        Live on Polygon Testnet
+                    </div>
+                    <h1 class="text-5xl sm:text-7xl lg:text-8xl font-display font-black mb-6 animate-fade-in-up">
+                        <span class="bg-gradient-to-r from-white via-primary-200 to-white bg-clip-text text-transparent">PLAY.</span>
+                        <span class="bg-gradient-to-r from-accent-400 to-accent-300 bg-clip-text text-transparent"> EARN.</span>
+                        <br>
+                        <span class="bg-gradient-to-r from-cyber-400 to-cyber-300 bg-clip-text text-transparent">DONATE.</span>
+                    </h1>
+                    <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 animate-fade-in-up animation-delay-200">
+                        Defeat enemies, earn legendary gear, mint NFTs, and trade them in a marketplace where <span class="text-cyber-400 font-semibold">90% of every sale goes to charity</span>. All on-chain, all transparent.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up animation-delay-400">
+                        <button onclick="navigate('game')" class="px-8 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500 transition-all duration-300 shadow-xl shadow-primary-500/30 hover:shadow-primary-500/50 hover:scale-105 hover:-translate-y-1">
+                            ⚔️ Start Playing
+                        </button>
+                        <button onclick="navigate('marketplace')" class="px-8 py-4 rounded-2xl font-bold text-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 hover:-translate-y-1">
+                            🏪 Explore Marketplace
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-10">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="stat-card">
+                        <div class="text-3xl font-display font-bold bg-gradient-to-r from-cyber-400 to-cyber-300 bg-clip-text text-transparent" id="stat-donated">12.5 ETH</div>
+                        <div class="text-sm text-gray-400 mt-1">Total Donated</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="text-3xl font-display font-bold bg-gradient-to-r from-primary-400 to-primary-300 bg-clip-text text-transparent" id="stat-nfts">2,847</div>
+                        <div class="text-sm text-gray-400 mt-1">NFTs Minted</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="text-3xl font-display font-bold bg-gradient-to-r from-accent-400 to-accent-300 bg-clip-text text-transparent" id="stat-players">1,203</div>
+                        <div class="text-sm text-gray-400 mt-1">Active Players</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="text-3xl font-display font-bold bg-gradient-to-r from-amber-400 to-amber-300 bg-clip-text text-transparent" id="stat-guilds">48</div>
+                        <div class="text-sm text-gray-400 mt-1">Active Guilds</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+                <h2 class="text-3xl sm:text-4xl font-display font-bold text-center mb-16">
+                    <span class="bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">How It Works</span>
+                </h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="feature-card group">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500/20 to-primary-600/20 border border-primary-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">⚔️</div>
+                        <h3 class="text-xl font-bold mb-3">Battle & Earn</h3>
+                        <p class="text-gray-400 leading-relaxed">Defeat enemies in intense battles. Win legendary gear with unique stats — weapons, armor, and artifacts with randomized rarity.</p>
+                    </div>
+                    <div class="feature-card group">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-accent-500/20 to-accent-600/20 border border-accent-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">🔮</div>
+                        <h3 class="text-xl font-bold mb-3">Mint as NFT</h3>
+                        <p class="text-gray-400 leading-relaxed">Turn your hard-won gear into ERC-721 NFTs on Polygon. Metadata stored permanently on IPFS via Pinata. True digital ownership.</p>
+                    </div>
+                    <div class="feature-card group">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyber-500/20 to-cyber-600/20 border border-cyber-500/20 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">💚</div>
+                        <h3 class="text-xl font-bold mb-3">Trade for Charity</h3>
+                        <p class="text-gray-400 leading-relaxed">Trade gear in our marketplace. 90% of every sale automatically goes to charity. Transparent, on-chain, verifiable donations.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== GAME PAGE ===== -->
+        <section id="page-game" class="page">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl sm:text-5xl font-display font-bold mb-4">
+                        <span class="bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">⚔️ Battle Arena</span>
+                    </h1>
+                    <p class="text-gray-400 text-lg">Defeat enemies to earn legendary gear. Mint your loot as NFTs!</p>
+                </div>
+
+                <!-- Game Arena -->
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Player Panel -->
+                    <div class="glass-card p-6">
+                        <div class="text-center">
+                            <div class="text-6xl mb-4">🧙‍♂️</div>
+                            <h3 class="text-xl font-bold mb-1" id="player-name">Hero</h3>
+                            <p class="text-sm text-gray-400 mb-4">Level <span id="player-level">1</span></p>
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="text-gray-400">HP</span>
+                                        <span id="player-hp-text" class="text-cyber-400">100/100</span>
+                                    </div>
+                                    <div class="w-full h-3 bg-surface-800 rounded-full overflow-hidden">
+                                        <div id="player-hp-bar" class="h-full bg-gradient-to-r from-cyber-500 to-cyber-400 rounded-full transition-all duration-500" style="width:100%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="text-gray-400">Attack</span>
+                                        <span id="player-atk" class="text-amber-400">25</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="text-gray-400">XP</span>
+                                        <span id="player-xp-text" class="text-primary-400">0/100</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-surface-800 rounded-full overflow-hidden">
+                                        <div id="player-xp-bar" class="h-full bg-gradient-to-r from-primary-500 to-accent-500 rounded-full transition-all duration-500" style="width:0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Battle Area -->
+                    <div class="glass-card p-8 flex flex-col items-center justify-center min-h-[400px]">
+                        <div id="battle-area">
+                            <div id="enemy-display" class="text-center mb-8">
+                                <div class="text-8xl mb-4 animate-bounce-slow" id="enemy-icon">👹</div>
+                                <h3 class="text-2xl font-bold" id="enemy-name">Shadow Goblin</h3>
+                                <p class="text-sm text-gray-400 mt-1">Level <span id="enemy-level">1</span></p>
+                                <div class="mt-4 max-w-xs mx-auto">
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="text-gray-400">HP</span>
+                                        <span id="enemy-hp-text" class="text-red-400">50/50</span>
+                                    </div>
+                                    <div class="w-full h-3 bg-surface-800 rounded-full overflow-hidden">
+                                        <div id="enemy-hp-bar" class="h-full bg-gradient-to-r from-red-500 to-red-400 rounded-full transition-all duration-500" style="width:100%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="battle-log" class="text-center text-sm text-gray-400 h-8 mb-6"></div>
+                            <div class="flex gap-4 justify-center">
+                                <button id="btn-attack" onclick="attackEnemy()" class="px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 transition-all hover:scale-105 shadow-lg shadow-red-500/25">
+                                    ⚔️ Attack
+                                </button>
+                                <button id="btn-heal" onclick="healPlayer()" class="px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-cyber-600 to-cyber-500 hover:from-cyber-500 hover:to-cyber-400 transition-all hover:scale-105 shadow-lg shadow-cyber-500/25">
+                                    💊 Heal
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Victory Screen (hidden by default) -->
+                        <div id="victory-screen" class="hidden text-center">
+                            <div class="text-6xl mb-4">🎉</div>
+                            <h3 class="text-2xl font-display font-bold text-cyber-400 mb-2">Victory!</h3>
+                            <p class="text-gray-400 mb-6">You earned a new gear drop!</p>
+                            <div id="loot-display" class="glass-card p-6 mb-6 inline-block">
+                                <!-- Loot will be populated here -->
+                            </div>
+                            <div class="flex gap-4 justify-center">
+                                <button id="btn-mint" onclick="mintGearNFT()" class="px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-accent-600 to-accent-500 hover:from-accent-500 hover:to-accent-400 transition-all hover:scale-105 shadow-lg shadow-accent-500/25">
+                                    🔮 Mint as NFT
+                                </button>
+                                <button onclick="nextBattle()" class="px-6 py-3 rounded-xl font-bold bg-white/10 border border-white/10 hover:bg-white/20 transition-all hover:scale-105">
+                                    ⚔️ Next Battle
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Inventory -->
+                    <div class="glass-card p-6">
+                        <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                            <span>🎒</span> Inventory
+                        </h3>
+                        <div id="inventory-list" class="space-y-3 max-h-[400px] overflow-y-auto custom-scrollbar">
+                            <p class="text-gray-500 text-sm text-center py-8">Defeat enemies to earn gear!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== MARKETPLACE PAGE ===== -->
+        <section id="page-marketplace" class="page">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
+                    <div>
+                        <h1 class="text-4xl sm:text-5xl font-display font-bold mb-2">
+                            <span class="bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">🏪 Marketplace</span>
+                        </h1>
+                        <p class="text-gray-400">Trade gear NFTs — 90% of every sale goes to charity</p>
+                    </div>
+                    <button onclick="showListModal()" class="px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500 transition-all hover:scale-105 shadow-lg shadow-primary-500/25">
+                        + List Your NFT
+                    </button>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex gap-3 mb-8 flex-wrap">
+                    <button class="filter-btn active" onclick="filterMarketplace('all', this)">All</button>
+                    <button class="filter-btn" onclick="filterMarketplace('legendary', this)">🟡 Legendary</button>
+                    <button class="filter-btn" onclick="filterMarketplace('epic', this)">🟣 Epic</button>
+                    <button class="filter-btn" onclick="filterMarketplace('rare', this)">🔵 Rare</button>
+                    <button class="filter-btn" onclick="filterMarketplace('common', this)">⚪ Common</button>
+                </div>
+
+                <!-- Listings Grid -->
+                <div id="marketplace-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== DONATIONS PAGE ===== -->
+        <section id="page-donations" class="page">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <h1 class="text-4xl sm:text-5xl font-display font-bold mb-4 text-center">
+                    <span class="bg-gradient-to-r from-cyber-400 to-cyber-300 bg-clip-text text-transparent">💚 Donation Dashboard</span>
+                </h1>
+                <p class="text-gray-400 text-center mb-12 text-lg">Every NFT sale contributes to charity. Transparent, on-chain, verifiable.</p>
+
+                <!-- Donation Stats -->
+                <div class="grid sm:grid-cols-3 gap-6 mb-12">
+                    <div class="glass-card p-6 text-center">
+                        <div class="text-4xl font-display font-bold text-cyber-400 mb-2" id="donation-total">12.5 MATIC</div>
+                        <div class="text-sm text-gray-400">Total Donated</div>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <div class="text-4xl font-display font-bold text-primary-400 mb-2" id="donation-txs">156</div>
+                        <div class="text-sm text-gray-400">Donation Transactions</div>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <div class="text-4xl font-display font-bold text-accent-400 mb-2" id="donation-donors">89</div>
+                        <div class="text-sm text-gray-400">Unique Donors</div>
+                    </div>
+                </div>
+
+                <!-- Charity Info -->
+                <div class="glass-card p-8 mb-12">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-cyber-500/20 to-cyber-600/20 border border-cyber-500/20 flex items-center justify-center text-5xl shrink-0">🌍</div>
+                        <div>
+                            <h3 class="text-2xl font-bold mb-2">Charity Wallet</h3>
+                            <p class="text-gray-400 mb-3">All donations are sent to a transparent charity wallet on the Polygon network. Donations are verifiable on-chain by anyone.</p>
+                            <code class="text-sm text-cyber-400 bg-cyber-500/10 px-3 py-1 rounded-lg" id="charity-address">0x742d...44e8</code>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Donations -->
+                <h2 class="text-2xl font-display font-bold mb-6">Recent Donations</h2>
+                <div class="space-y-4" id="donation-history">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== GUILDS PAGE ===== -->
+        <section id="page-guilds" class="page">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <h1 class="text-4xl sm:text-5xl font-display font-bold mb-2">
+                            <span class="bg-gradient-to-r from-amber-400 to-amber-300 bg-clip-text text-transparent">🛡️ Guilds</span>
+                        </h1>
+                        <p class="text-gray-400">Join a guild, compete on the leaderboard, and donate together</p>
+                    </div>
+                    <button onclick="showCreateGuildModal()" class="px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 transition-all hover:scale-105 shadow-lg shadow-amber-500/25 text-black">
+                        + Create Guild
+                    </button>
+                </div>
+
+                <div class="mb-8">
+                    <input type="text" id="guild-search" placeholder="Search guilds by name..." oninput="searchGuilds()" class="w-full bg-surface-800 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500/50 transition-colors" />
+                </div>
+
+                <!-- Guild Leaderboard -->
+                <div class="glass-card overflow-hidden mb-12">
+                    <div class="px-6 py-4 border-b border-white/5">
+                        <h3 class="font-bold text-lg">🏆 Guild Leaderboard</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="text-sm text-gray-400 border-b border-white/5">
+                                    <th class="text-left px-6 py-3">Rank</th>
+                                    <th class="text-left px-6 py-3">Guild</th>
+                                    <th class="text-left px-6 py-3">Members</th>
+                                    <th class="text-left px-6 py-3">Total Donated</th>
+                                    <th class="text-right px-6 py-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="guild-leaderboard">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== STREAMING PAGE ===== -->
+        <section id="page-streaming" class="page">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <h1 class="text-4xl sm:text-5xl font-display font-bold mb-4">
+                    <span class="bg-gradient-to-r from-red-400 to-accent-400 bg-clip-text text-transparent">🎬 Creator Streams</span>
+                </h1>
+                <p class="text-gray-400 mb-12 text-lg">Watch creators play, learn strategies, and tip them with crypto</p>
+
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Main stream -->
+                    <div class="lg:col-span-2">
+                        <div class="glass-card overflow-hidden">
+                            <div class="aspect-video bg-surface-800 relative flex items-center justify-center">
+                                <div class="text-center">
+                                    <div class="text-6xl mb-4">🎮</div>
+                                    <p class="text-gray-400">Stream Player</p>
+                                    <p class="text-sm text-gray-500">Live gameplay will appear here</p>
+                                </div>
+                                <div class="absolute top-4 left-4 px-3 py-1 rounded-full bg-red-500/90 text-xs font-bold flex items-center gap-1.5">
+                                    <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> LIVE
+                                </div>
+                                <div class="absolute top-4 right-4 px-3 py-1 rounded-full bg-black/50 text-xs font-medium">
+                                    👁️ 1,247 viewers
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-accent-500 to-primary-500 flex items-center justify-center text-xl font-bold">V</div>
+                                    <div>
+                                        <h3 class="font-bold text-lg">VortexGamer</h3>
+                                        <p class="text-sm text-gray-400">Speedrunning CreatorVerse Arena</p>
+                                    </div>
+                                </div>
+                                <!-- Tip Section -->
+                                <div class="bg-surface-800/50 rounded-xl p-4 border border-white/5">
+                                    <h4 class="font-semibold text-sm mb-3 text-gray-300">💎 Send a Crypto Tip</h4>
+                                    <div class="flex gap-3">
+                                        <input type="number" id="tip-amount" placeholder="0.01" step="0.01" min="0.001" class="flex-1 bg-surface-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-accent-500/50 transition-colors" />
+                                        <span class="flex items-center text-sm text-gray-400 -ml-1">MATIC</span>
+                                        <button onclick="sendTip('0xVortexGamer')" class="px-5 py-2.5 rounded-xl font-bold text-sm bg-gradient-to-r from-accent-600 to-accent-500 hover:from-accent-500 hover:to-accent-400 transition-all hover:scale-105">
+                                            Send Tip
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat / Recent Tips -->
+                    <div class="glass-card p-6 flex flex-col">
+                        <h3 class="font-bold text-lg mb-4">💬 Recent Tips</h3>
+                        <div id="tips-list" class="flex-1 space-y-3 overflow-y-auto max-h-[500px] custom-scrollbar">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Streamers -->
+                <h2 class="text-2xl font-display font-bold mt-16 mb-8">More Creators</h2>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="streamers-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== DAO PAGE ===== -->
+        <section id="page-dao" class="page">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
+                    <div>
+                        <h1 class="text-4xl sm:text-5xl font-display font-bold mb-2">
+                            <span class="bg-gradient-to-r from-primary-400 to-cyber-400 bg-clip-text text-transparent">🏛️ DAO Governance</span>
+                        </h1>
+                        <p class="text-gray-400">Community-driven decisions. Propose and vote on the future of CreatorVerse.</p>
+                    </div>
+                    <button onclick="showProposalModal()" class="px-6 py-3 rounded-xl font-bold bg-gradient-to-r from-primary-600 to-cyber-600 hover:from-primary-500 hover:to-cyber-500 transition-all hover:scale-105 shadow-lg shadow-primary-500/25">
+                        + New Proposal
+                    </button>
+                </div>
+
+                <div id="proposals-list" class="space-y-6">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PROFILE PAGE ===== -->
+        <section id="page-profile" class="page">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <h1 class="text-4xl sm:text-5xl font-display font-bold mb-12">
+                    <span class="bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">👤 My Profile</span>
+                </h1>
+
+                <!-- Profile Header -->
+                <div class="glass-card p-8 mb-12">
+                    <div class="flex flex-col sm:flex-row items-center gap-6">
+                        <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-4xl font-display font-bold shadow-lg shadow-primary-500/30">
+                            <span id="profile-avatar">?</span>
+                        </div>
+                        <div class="text-center sm:text-left">
+                            <h2 class="text-2xl font-bold mb-1" id="profile-address">Connect Wallet</h2>
+                            <p class="text-gray-400" id="profile-network">No network connected</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Stats -->
+                <div class="grid sm:grid-cols-3 gap-6 mb-12">
+                    <div class="glass-card p-6 text-center">
+                        <div class="text-3xl font-display font-bold text-primary-400" id="profile-nfts">0</div>
+                        <div class="text-sm text-gray-400 mt-1">NFTs Owned</div>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <div class="text-3xl font-display font-bold text-cyber-400" id="profile-donations">0 MATIC</div>
+                        <div class="text-sm text-gray-400 mt-1">Total Donated</div>
+                    </div>
+                    <div class="glass-card p-6 text-center">
+                        <div class="text-3xl font-display font-bold text-accent-400" id="profile-battles">0</div>
+                        <div class="text-sm text-gray-400 mt-1">Battles Won</div>
+                    </div>
+                </div>
+
+                <!-- My NFTs -->
+                <h2 class="text-2xl font-display font-bold mb-6">My NFT Collection</h2>
+                <div id="my-nfts-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div class="glass-card p-8 text-center text-gray-500 col-span-full">
+                        <p>Connect your wallet and play the game to mint NFTs!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===================== MODALS ===================== -->
+    <!-- List NFT Modal -->
+    <div id="modal-list" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 class="text-xl font-bold mb-6">📋 List Your NFT</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Token ID</label>
+                    <input type="number" id="list-token-id" placeholder="0" class="w-full bg-surface-900 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary-500/50" />
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Price (MATIC)</label>
+                    <input type="number" id="list-price" placeholder="0.1" step="0.01" class="w-full bg-surface-900 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary-500/50" />
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button onclick="listNFT()" class="flex-1 py-3 rounded-xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 hover:from-primary-500 hover:to-accent-500 transition-all">List NFT</button>
+                    <button onclick="closeModal('modal-list')" class="flex-1 py-3 rounded-xl font-bold bg-white/10 border border-white/10 hover:bg-white/20 transition-all">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Guild Modal -->
+    <div id="modal-guild" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 class="text-xl font-bold mb-6">🛡️ Create a Guild</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Guild Name</label>
+                    <input type="text" id="guild-name-input" placeholder="Enter guild name" class="w-full bg-surface-900 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-amber-500/50" />
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button onclick="createGuild()" class="flex-1 py-3 rounded-xl font-bold bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 transition-all text-black">Create</button>
+                    <button onclick="closeModal('modal-guild')" class="flex-1 py-3 rounded-xl font-bold bg-white/10 border border-white/10 hover:bg-white/20 transition-all">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Proposal Modal -->
+    <div id="modal-proposal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 class="text-xl font-bold mb-6">🏛️ New Proposal</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Title</label>
+                    <input type="text" id="proposal-title" placeholder="Proposal title" class="w-full bg-surface-900 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary-500/50" />
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">Description</label>
+                    <textarea id="proposal-desc" placeholder="Describe your proposal..." rows="4" class="w-full bg-surface-900 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:border-primary-500/50 resize-none"></textarea>
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button onclick="createProposal()" class="flex-1 py-3 rounded-xl font-bold bg-gradient-to-r from-primary-600 to-cyber-600 hover:from-primary-500 hover:to-cyber-500 transition-all">Submit</button>
+                    <button onclick="closeModal('modal-proposal')" class="flex-1 py-3 rounded-xl font-bold bg-white/10 border border-white/10 hover:bg-white/20 transition-all">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden">
+        <div class="glass-card px-6 py-4 flex items-center gap-3 shadow-xl border-l-4 border-cyber-500 max-w-sm">
+            <span id="toast-icon" class="text-xl">✅</span>
+            <span id="toast-message" class="text-sm"></span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 bg-surface-900/50 py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-white font-display font-bold text-xs">CV</div>
+                    <span class="font-display text-sm font-bold text-gray-400">CreatorVerse</span>
+                </div>
+                <p class="text-sm text-gray-500">Built with ❤️ for charity • Polygon Testnet • © 2026 CreatorVerse</p>
+                <div class="flex gap-4">
+                    <a href="#" class="text-gray-500 hover:text-white transition-colors text-sm">GitHub</a>
+                    <a href="#" class="text-gray-500 hover:text-white transition-colors text-sm">Discord</a>
+                    <a href="#" class="text-gray-500 hover:text-white transition-colors text-sm">Twitter</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
